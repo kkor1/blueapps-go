@@ -24,6 +24,7 @@ import (
 	"html/template"
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/gin-contrib/sessions"
@@ -57,7 +58,7 @@ func New(slogger *slog.Logger) *gin.Engine {
 	router := gin.New()
 	_ = router.SetTrustedProxies(nil)
 	store := cookie.NewStore([]byte(config.G.Platform.AppSecret))
-	store.Options(sessions.Options{MaxAge: int(30 * 60)})
+	store.Options(sessions.Options{MaxAge: 30 * int(time.Minute / time.Second)})
 	router.Use(sessions.Sessions(fmt.Sprintf("%s-session", config.G.Platform.AppID), store))
 
 	// 服务指标
